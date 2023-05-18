@@ -126,7 +126,7 @@ int main()
 		printf("*Nhap so trang cua tai lieu: ");
 		scanf("%d",&sotrang);
 		print();
-		printf("\n______________________________________________________________________\n1. Tiep tuc voi so trang khac\t  2. export file txt\t   t3. Exit\nChon: ");
+		printf("\n______________________________________________________________________\n1. Tiep tuc voi so trang khac\t  2. export file txt\t   3. Exit\nChon: ");
 		fflush(stdin);
 		scanf("%c",&check);
 		fflush(stdin);
@@ -137,7 +137,7 @@ int main()
 			system("cls");
 			printf("*Nhap so trang cua tai lieu: %d\n",sotrang);
 			print();
-			printf("\n______________________________________________________________________\n1. Tiep tuc voi so trang khac\t  2. export file txt\t   t3. Exit\nChon: ");
+			printf("\n______________________________________________________________________\n1. Tiep tuc voi so trang khac\t  2. export file txt\t   3. Exit\nChon: ");
 			fflush(stdin);
 			scanf("%c",&check);
 			fflush(stdin);
