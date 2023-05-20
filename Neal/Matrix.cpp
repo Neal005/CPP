@@ -240,7 +240,7 @@ void Matrix()
 			printf("*Choose operator:\n");
 			while(DK==1)
 			{
-				printf("1. Ladder matrix	2. Shortened ladder matrix	3.Solution of the equation\n\n	4. Enter a new matrix		5. Exit\nChon: ");
+				printf("1. Ladder matrix	2. Shortened ladder matrix	3.Solution of the equation\n\n	4. Enter a new matrix		5. Exit\nChoose: ");
 				fflush(stdin);
 				scanf("%c",&chon);
 				if(chon!='1'&&chon!='2'&&chon!='3'&&chon!='4'&&chon!='5')
