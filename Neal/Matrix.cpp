@@ -10,12 +10,12 @@ void Matrix()
 		int a,b,m=0,n=0,rA=0,rA1=0;
 		while(m<=0||n<=0)
 		{
-			printf("Nhap ma tran A* cap m x n:\nNhap m: "); scanf("%d",&m);fflush(stdin);
-			printf("Nhap n: "); scanf("%d",&n);fflush(stdin);
+			printf("Enter matrix A* of size m x n:\nEnter m: "); scanf("%d",&m);fflush(stdin);
+			printf("Enter n: "); scanf("%d",&n);fflush(stdin);
 			if(m<=0||n<=0) 
 			{
 				system("cls");
-				printf("*Chi nhap so lon hon 0 (m, n > 0)\n");
+				printf("*Only enter numbers greater than 0 (m, n > 0)\n");
 			}
 		}
 		double temp,A[m][n];
@@ -23,7 +23,7 @@ void Matrix()
 		double B1[n];
 		for(int i=0;i<m;i++)
 		{
-			printf("Nhap hang thu %d: ",i+1);
+			printf("Enter the %dth row: ",i+1);
 			for(int j=0;j<n;j++)
 			{
 				do
@@ -39,7 +39,7 @@ void Matrix()
 						if(B1[j]!=0)A[i][j]=A[i][j]/B1[j];
 						else 
 						{
-							printf("Mau so phai khac khong moi nhap lai hang %d: ",i+1);
+							printf("The denominator must be not equal to zero!\n*Please enter the %dth row again: ",i+1);
 							fflush(stdin);
 						}
 					}
@@ -237,16 +237,16 @@ void Matrix()
 		{
 			int DK=1;
 			printf("____________________________________________________________________________________\n");
-			printf("*Chon phep toan:\n");
+			printf("*Choose operator:\n");
 			while(DK==1)
 			{
-				printf("1. Ma tran bac thang	2. Ma tran bac thang rut gon	3.Ngiem cua phuong trinh\n\n	4. Nhap ma tran moi		5. Cancel\nChon: ");
+				printf("1. Ladder matrix	2. Shortened ladder matrix	3.Solution of the equation\n\n	4. Enter a new matrix		5. Exit\nChon: ");
 				fflush(stdin);
 				scanf("%c",&chon);
 				if(chon!='1'&&chon!='2'&&chon!='3'&&chon!='4'&&chon!='5')
 				{
 					system("cls");
-					printf("*Chi chon phep toan tu 1 - 5, xin hay chon lai!\n");
+					printf("*Only choose operator 1 - 5, please choose again!\n");
 				}
 				else
 				{
@@ -256,16 +256,16 @@ void Matrix()
 			if(chon=='1')
 			{
 				system("cls");
-				printf("Ma tran vua nhap: \n");
+				printf("Input Matrix: \n");
 				for(int i=0;i<m;i++)
 				{
 					for(int i1=0;i1<n;i1++)
 					{
-						printf("%lf ",A2[i][i1]);
+						printf("%lf 	",A2[i][i1]);
 					}
 					printf("\n");
 				}
-				printf("Ma tran bac thang:\n");
+				printf("Ladder matrix:\n");
 				for(int i=0;i<m;i++)
 				{
 					for(int j=0;j<n;j++)
@@ -278,16 +278,16 @@ void Matrix()
 			if(chon=='2')
 			{
 				system("cls");
-				printf("Ma tran vua nhap: \n");
+				printf("Input Matrix: \n");
 				for(int i=0;i<m;i++)
 				{
 					for(int i1=0;i1<n;i1++)
 					{
-						printf("%lf ",A2[i][i1]);
+						printf("%lf 	",A2[i][i1]);
 					}
 					printf("\n");
 				}
-				printf("Ma tran bac thang rut gon: \n");
+				printf("Shortened ladder matrix: \n");
 				for(int i=0;i<m;i++)
 				{
 					for(int j=0;j<n;j++)
@@ -300,20 +300,20 @@ void Matrix()
 			if(chon=='3')
 			{
 				system("cls");
-				printf("Ma tran vua nhap: \n");
+				printf("Input Matrix: \n");
 				for(int i=0;i<m;i++)
 				{
 					for(int i1=0;i1<n;i1++)
 					{
-						printf("%lf ",A2[i][i1]);
+						printf("%lf 	",A2[i][i1]);
 					}
 					printf("\n");
 				}
-				printf("Nghiem: \n");
-				if(rA==rA1&&rA<n-1) printf("He phuong trinh co vo so nghiem\n");
+				printf("Solution of the equation: \n");
+				if(rA==rA1&&rA<n-1) printf("The equation has infinitely many solutions (IME)\n");
 				else
 				{
-					if(rA<rA1) printf("HPTVN\n");
+					if(rA<rA1) printf("system of equations with no solution (NS)\n");
 					else
 					{
 						for(int i=0;i<n-1;i++)
