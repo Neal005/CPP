@@ -4,11 +4,10 @@
 void Matrix()
 {
 	char chon;
-	int check;
 	while(chon!='5')
 	{
 		chon='0';
-		int a,b,m=0,n=0,rA=0,rA1=0;
+		int a,b,m=0,n=0,rA=0,rA1=0,check;
 		while(m<=0||n<=0)
 		{
 			printf("Enter matrix A* of size m x n:\nEnter m: "); scanf("%d",&m);fflush(stdin);
@@ -25,9 +24,9 @@ void Matrix()
 		for(int i=0;i<m;i++)
 		{
 			printf("Enter the %dth row: ",i+1);
-			for(int j=0;j<n;j++)
+			do
 			{
-				do
+				for(int j=0;j<n;j++)
 				{
 					check=0;
 					B1[j]=1;
@@ -35,9 +34,8 @@ void Matrix()
 					scanf("%lf",&A[i][j]);
 					scanf("%c",&B[j]);
 					if(B[j]=='v'||B[j]=='V')
-					scanf("%lf",&B1[j]);
-					if(B[j]=='v'||B[j]=='V')
 					{
+						scanf("%lf",&B1[j]);
 						if(B1[j]>0) A[i][j]=sqrt(B1[j]);
 						else
 						{
@@ -46,23 +44,22 @@ void Matrix()
 							check=1;
 						}
 					}
-					else
+					
+					if(B[j]=='/')
 					{
-						if(B[j]=='/')
 						scanf("%lf",&B1[j]);
-						if(B[j]=='/')
+						if(B1[j]!=0)A[i][j]=A[i][j]/B1[j];
+						else 
 						{
-							if(B1[j]!=0)A[i][j]=A[i][j]/B1[j];
-							else 
-							{
-								printf("The denominator must be not equal to zero!\n*Please enter the %dth row again: ",i+1);
-								fflush(stdin);
-							}
-						}	
-					}
-				} while(B1[j]==0||check==1);
-			}
-			fflush(stdin);
+							printf("The denominator must be not equal to zero!\n*Please enter the %dth row again: ",i+1);
+							fflush(stdin);
+							check=2;
+						}
+					}	
+					if(check==2||check==1) j--;
+				}
+				fflush(stdin);
+			} while(check==2||check==1);
 		}
 		double A2[m][n];
 		for(int i=0;i<m;i++)
