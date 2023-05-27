@@ -71,50 +71,54 @@ void create_txt()
 
 void print()
 {
-	if(debug) printf("So trang A4: %d\nSodu: %d\n",sotrang/4,sotrang%4);
-	if(sotrang/4==0)
+	if(sotrang<=1500)
 	{
-		printf("\t*Chi co 1 mat do so trang < hoac = 1*\nNhap: ");
-		for(int j=1;j<=sotrang;j+=8)
+		if(debug) printf("So trang A4: %d\nSodu: %d\n",sotrang/4,sotrang%4);
+		if(sotrang/4==0)
 		{
-			printf("%d",j);
-			if(j+3<=sotrang) printf("-%d",j+3);
-			if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
-			if(j+8<=sotrang) printf(",");
+			printf("\t*Chi co 1 mat do so trang < hoac = 1*\nNhap: ");
+			for(int j=1;j<=sotrang;j+=8)
+			{
+				printf("%d",j);
+				if(j+3<=sotrang) printf("-%d",j+3);
+				if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
+				if(j+8<=sotrang) printf(",");
+			}
+		}
+		else
+		if(sotrang/4==1&&sotrang%4==0)
+		{
+			printf("\t*Chi co 1 mat do so trang < hoac = 1*\nNhap: ");
+			for(int j=1;j<=sotrang;j+=8)
+			{
+				printf("%d",j);
+				if(j+3<=sotrang) printf("-%d",j+3);
+				if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
+				if(j+8<=sotrang) printf(",");
+			}
+		}
+		else
+		{
+			printf("______________________________________________________________________\n\n");
+			printf("+ Mat truoc: ");
+			for(int j=1;j<=sotrang;j+=8)
+			{
+				printf("%d",j);
+				if(j+3<=sotrang) printf("-%d",j+3);
+				if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
+				if(j+8<=sotrang) printf(",");
+			}
+			printf("\n\n+ Mat sau: ");
+			for(int j=5;j<=sotrang;j+=8)
+			{
+				printf("%d",j);
+				if(j+3<=sotrang) printf("-%d",j+3);
+				if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
+				if(j+8<=sotrang) printf(",");
+			}
 		}
 	}
-	else
-	if(sotrang/4==1&&sotrang%4==0)
-	{
-		printf("\t*Chi co 1 mat do so trang < hoac = 1*\nNhap: ");
-		for(int j=1;j<=sotrang;j+=8)
-		{
-			printf("%d",j);
-			if(j+3<=sotrang) printf("-%d",j+3);
-			if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
-			if(j+8<=sotrang) printf(",");
-		}
-	}
-	else
-	{
-		printf("______________________________________________________________________\n\n");
-		printf("+ Mat truoc: ");
-		for(int j=1;j<=sotrang;j+=8)
-		{
-			printf("%d",j);
-			if(j+3<=sotrang) printf("-%d",j+3);
-			if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
-			if(j+8<=sotrang) printf(",");
-		}
-		printf("\n\n+ Mat sau: ");
-		for(int j=5;j<=sotrang;j+=8)
-		{
-			printf("%d",j);
-			if(j+3<=sotrang) printf("-%d",j+3);
-			if(j+3>sotrang&&(j+2<=sotrang||j+1<=sotrang)) for(int i1=sotrang;i1>=j;i1--) {printf("-%d",i1);break;}
-			if(j+8<=sotrang) printf(",");
-		}
-	}
+	else printf("\n*So trang qua lon chi co the xuat file txt!\n");
 }
 
 int main()
