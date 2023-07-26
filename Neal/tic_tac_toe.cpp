@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<windows.h>
 #define debug 0
+#define ai 0
 typedef struct
 {
 	int x,y;
@@ -360,19 +361,19 @@ int main()
 	do
 	{
 		printf("\t          ***TIC TAC TOE***\n\n");
-		printf("\t1. Normal\n\t2. AI\n\t3. Exit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
-		if(chose=='1'||chose=='2')
+		printf("\t1. Normal\n\t2. A.I (coming soon...)\n\t3. Exit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
+		if(chose=='1')//||chose=='2')
 		{
 			system("cls");
 			char again='1';
 			do
 			{
 				if(chose=='1') normal();
-				if(chose=='2') AI();
+				if(ai) if(chose=='2') AI();
 				do
 				{
 					printf("     1. Again\t     2. Menu\nchoose: "); fflush(stdin); scanf("%c",&again);
-					if(again!='1'&&again!='2') printf("Eror number!\n");
+					if(again!='1'&&again!='2') printf("Error number!\n");
 				} while(again!='2'&&again!='1');
 				if(again=='1')
 				{
@@ -386,6 +387,7 @@ int main()
 				}
 			} while(again=='1');
 		}
-		if(chose!='1'&&chose!='2'&&chose!='3') printf("*Eror number, please chose again!");
+		if(!ai) if(chose=='2') system("cls");
+		if(chose!='1'&&chose!='2'&&chose!='3') printf("*Error number, please chose again!");
 	} while(chose!='3');
 }
