@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<windows.h>
 #define debug 0
-#define ai 0
 typedef struct
 {
 	int x,y;
@@ -57,10 +56,23 @@ void init_cell(cell* c)
 	c->x=c->y=-1;
 }
 
-void print_table()
+int xy_to_num(int x,int y)
+{
+	return (n*x)+y+1;
+}
+
+void print_table(int AI)
 {
 	for(int i=0;i<(((n*3)+2)/2);i++) printf(" "); printf("\t");
-	printf("***TIC TAC TOE***\n\n\t   ");
+	printf("***TIC TAC TOE***");
+	if(AI)
+	{
+		printf("\n\n\t\tA.I\n\n\t   ");
+	}
+	else
+	{
+		printf("\n\n\t   ");
+	}
 	printf("   ");
 	for(int i=1;i<n;i++)
 	{
@@ -123,8 +135,6 @@ void print_table()
 void check_win(int x, int y, int player)
 {
 	int count=0;
-//	cell c;
-//	intnit_cell(&c);
 	//X
 	for(int i=1;i<3;i++) 
 		if(table[x][y+i]==player) if(y+i<3&&y+i>-1) count++;
@@ -133,6 +143,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--)
@@ -142,6 +153,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2)
@@ -151,6 +163,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 
 	//Y
 	count=0;
@@ -161,6 +174,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--) 
@@ -170,6 +184,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2) 
@@ -179,6 +194,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	//X&Y
 	count=0;
@@ -189,6 +205,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--) 
@@ -198,6 +215,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2) 
@@ -207,6 +225,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	//Y&X
 	count=0;
@@ -217,6 +236,7 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--) 
@@ -228,18 +248,20 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2) 
-		if(table[x-i][y+i]==player) if(x-i<3&&x-i>-1&&y+i>-1&&y+i<3) count++;
+		if(table[x+i][y-i]==player) if(x+i<3&&x+i>-1&&y-i>-1&&y-i<3) count++;
 	if(count==2)
 	{
 		who_win=player;
 		return;
 	}
+	//if(count==1) warning=1;
 }
 
-void turn(int player)
+void turn(int AI,int player)
 {
 	int stop;
 	char numchar='0';
@@ -253,7 +275,8 @@ void turn(int player)
 		if(numchar<'1'||numchar>'9')
 		{
 			if(!debug) system("cls");
-			print_table();
+			if(AI) print_table(1);
+			else print_table(0);
 			fflush(stdin);
 			printf("Number is error!\n",numchar);
 		}
@@ -267,7 +290,8 @@ void turn(int player)
 			if(table[locate.A[num-1].x][locate.A[num-1].y]!=0)
 			{
 				if(!debug) system("cls");
-				print_table();
+				if(AI) print_table(1);
+				else print_table(0);
 				fflush(stdin);
 				printf("The cell is chosen! Please choose again!\n");
 			}
@@ -288,32 +312,294 @@ void turn(int player)
 			cache_o[cache_o[0]]=num;
 		}
 		if(!debug) system("cls");
-		print_table();
+		if(AI) print_table(1);
+		else print_table(0);
 		fflush(stdin);
 	}
 	check_win(locate.A[num-1].x,locate.A[num-1].y,player);
 }
 
-void AI_turn()
+void AI_turn(int num, int lucuto, int* turn_done,int player)
 {
 	cell c;
 	init_cell(&c);
-	for(int obj=1;obj<=cache_x[0];obj++)
+	int x=locate.A[num-1].x;
+	int y=locate.A[num-1].y;
+	
+	//X
+	int count=0;
+	for(int i=1;i<3;i++)
 	{
-		
+		if(table[x][y+i]==0&&y+i<3&&y+i>-1)
+		{
+			c.x=x;
+			c.y=y+i;
+		}
+		if(table[x][y+i]==player) if(y+i<3&&y+i>-1) count++;
 	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i>-3;i--)
+	{
+		if(table[x][y+i]==0&&y+i<3&&y+i>-1)
+		{
+			c.x=x;
+			c.y=y+i;
+		}
+		if(table[x][y+i]==player) if(y+i<3&&y+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i<3;i+=2)
+	{
+		if(table[x][y+i]==0&&y+i<3&&y+i>-1)
+		{
+			c.x=x;
+			c.y=y+i;
+		}
+		if(table[x][y+i]==player) if(y+i<3&&y+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+
+	//Y
+	count=0;
+	for(int i=1;i<3;i++) 
+	{
+		if(table[x+i][y]==0&&x+i<3&&x+i>-1)
+		{
+			c.x=x+i;
+			c.y=y;
+		}
+		if(table[x+i][y]==player) if(x+i<3&&x+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i>-3;i--) 
+	{
+		if(table[x+i][y]==0&&x+i<3&&x+i>-1)
+		{
+			c.x=x+i;
+			c.y=y;
+		}
+		if(table[x+i][y]==player) if(x+i<3&&x+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i<3;i+=2) 
+	{
+		if(table[x+i][y]==0&&x+i<3&&x+i>-1)
+		{
+			c.x=x+i;
+			c.y=y;
+		}
+		if(table[x+i][y]==player) if(x+i<3&&x+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	//X&Y
+	count=0;
+	for(int i=1;i<3;i++) 
+	{
+		if(table[x+i][y+i]==0&&x+i<3&&x+i>-1)
+		{
+			c.x=x+i;
+			c.y=y+i;
+		}
+		if(table[x+i][y+i]==player) if(x+i<3&&x+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i>-3;i--) 
+	{
+		if(table[x+i][y+i]==0&&x+i<3&&x+i>-1)
+		{
+			c.x=x+i;
+			c.y=y+i;
+		}
+		if(table[x+i][y+i]==player) if(x+i<3&&x+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i<3;i+=2) 
+	{
+		if(table[x+i][y+i]==0&&x+i<3&&x+i>-1)
+		{
+			c.x=x+i;
+			c.y=y+i;
+		}
+		if(table[x+i][y+i]==player) if(x+i<3&&x+i>-1) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	//Y&X
+	count=0;
+	for(int i=1;i<3;i++)
+	{
+		if(table[x+i][y-i]==0&&x+i<3&&x+i>-1&&y-i>-1&&y-i<3)
+		{
+			c.x=x+i;
+			c.y=y-i;
+		}
+		if(table[x+i][y-i]==player) if(x+i<3&&x+i>-1&&y-i>-1&&y-i<3) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i>-3;i--) 
+	{
+		if(table[x+i][y-i]==0&&x+i<3&&x+i>-1&&y-i>-1&&y-i<3)
+		{
+			c.x=x+i;
+			c.y=y-i;
+		}
+		if(table[x+i][y-i]==player) if(x+i<3&&x+i>-1&&y-i>-1&&y-i<3) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	count=0;
+	for(int i=-1;i<3;i+=2) 
+	{
+		if(table[x+i][y-i]==0&&x+i<3&&x+i>-1&&y-i>-1&&y-i<3)
+		{
+			c.x=x+i;
+			c.y=y-i;
+		}
+		if(table[x+i][y-i]==player) if(x+i<3&&x+i>-1&&y-i>-1&&y-i<3) count++;
+	}
+	if(count==1&&c.x>-1&&c.x<3&&c.y>-1&&c.y<3)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+	
+	if(cache_x[0]==1)
+	{
+		table[c.x][c.y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+		*turn_done=1;
+		check_win(c.x,c.y,2);
+		return;
+	}
+//	if(player==2&&cache_o[0]==lucuto)
+//	{
+//		table[c.x][c.y]=2;
+//		cache_o[0]++;
+//		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
+//		*turn_done=1;
+//		check_win(c.x,c.y,2);
+//		return;
+//	}
 }
 
 void normal()
 {
-	print_table();
+	print_table(0);
 	int count=1,stop_count=1;
 	who_win=0;
 	do
 	{
 		for(int i=1;i<=2;i++)
 		{
-			turn(i);
+			turn(0,i);
 			count++;
 			if(count==n*n+1||who_win!=0) break;
 		}
@@ -330,14 +616,48 @@ void normal()
 
 void AI()
 {
-	print_table();
+	print_table(1);
 	int count=1,stop_count=1;
 	who_win=0;
 	do
 	{
 		for(int i=1;i<=2;i++)
 		{
-			turn(i);
+			if(i==1) turn(1,i);
+			else
+			{
+				if(count<3)
+				{
+					int turn_done=0;
+					for(int j=cache_o[0];j>0;j--)
+					{
+						if(turn_done) break;
+						AI_turn(cache_o[j],j,&turn_done,2);
+					}
+					for(int j=cache_x[0];j>0;j--)
+					{
+						if(turn_done) break;
+						AI_turn(cache_x[j],j,&turn_done,1);
+					}
+				}
+				else
+				{
+					int turn_done=0;
+					for(int j=cache_x[0];j>0;j--)
+					{
+						if(turn_done) break;
+						AI_turn(cache_x[j],j,&turn_done,1);
+					}
+					for(int j=cache_o[0];j>0;j--)
+					{
+						if(turn_done) break;
+						AI_turn(cache_o[j],j,&turn_done,2);
+					}
+				}
+			}
+			//warning=0;
+			system("cls");
+			print_table(1);
 			count++;
 			if(count==n*n+1||who_win!=0) break;
 		}
@@ -345,7 +665,7 @@ void AI()
 		if(who_win!=0)
 		{
 			if(who_win==1) printf("\n*PLAYER X WON!*\n\n");
-			if(who_win==2) printf("\n*PLAYER O WON!*\n\n");
+			if(who_win==2) printf("\n*A.I WON!*\n\n");
 			win=0;
 		}
 	} while(stop_count&&win);
@@ -361,15 +681,15 @@ int main()
 	do
 	{
 		printf("\t          ***TIC TAC TOE***\n\n");
-		printf("\t1. Normal\n\t2. A.I (coming soon...)\n\t3. Exit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
-		if(chose=='1')//||chose=='2')
+		printf("\t1. Normal\n\t2. A.I\n\t3. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
+		if(chose=='1'||chose=='2')
 		{
 			system("cls");
 			char again='1';
 			do
 			{
 				if(chose=='1') normal();
-				if(ai) if(chose=='2') AI();
+				if(chose=='2') AI();
 				do
 				{
 					printf("     1. Again\t     2. Menu\nchoose: "); fflush(stdin); scanf("%c",&again);
@@ -387,7 +707,6 @@ int main()
 				}
 			} while(again=='1');
 		}
-		if(!ai) if(chose=='2') system("cls");
 		if(chose!='1'&&chose!='2'&&chose!='3') printf("*Error number, please chose again!");
 	} while(chose!='3');
 }
