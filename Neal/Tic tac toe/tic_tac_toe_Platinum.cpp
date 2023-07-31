@@ -319,7 +319,7 @@ void turn_play(int AI,int player, int count)
 				else stop=0;
 			}
 		}
-	} while(stop&&exit||numchar=='s');
+	} while(stop&&exits||numchar=='s');
 	if(table[locate.A[num-1].x][locate.A[num-1].y]==0&&num!=0)
 	{
 		table[locate.A[num-1].x][locate.A[num-1].y]=player;	
