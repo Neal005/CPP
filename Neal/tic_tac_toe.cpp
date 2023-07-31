@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<windows.h>
+#include<unistd.h>
 #define debug 0
 typedef struct
 {
@@ -11,7 +12,7 @@ typedef struct
 	cell A[9];
 } Locate;
 
-int table[3][3],win_player1=0,win_player2=0,win_AI=0,who_win=0,win=1,n=3,cache_x[100],cache_o[100];
+int table[3][3],win_player1=0,win_player2=0,win_player_AI=0,win_AI=0,who_win=0,win=1,n=3,cache_x[100],cache_o[100],exits,turn=0;
 Locate locate;
 
 void reset()
@@ -67,11 +68,13 @@ void print_table(int AI)
 	printf("***TIC TAC TOE***");
 	if(AI)
 	{
-		printf("\n\n\t\tA.I\n\n\t   ");
+		printf("\n\n\t\tA.I\n\n");
+		printf("Player: %d\t\t\tA.I: %d\n\n\t   ",win_player_AI,win_AI);
 	}
 	else
 	{
-		printf("\n\n\t   ");
+		printf("\n\n");
+		printf("Player X: %d\t\tPlayer O: %d\n\n\t   ",win_player1,win_player2);
 	}
 	printf("   ");
 	for(int i=1;i<n;i++)
@@ -143,7 +146,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--)
@@ -153,7 +155,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2)
@@ -163,7 +164,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 
 	//Y
 	count=0;
@@ -174,7 +174,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--) 
@@ -184,7 +183,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2) 
@@ -194,7 +192,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	//X&Y
 	count=0;
@@ -205,7 +202,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--) 
@@ -215,7 +211,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2) 
@@ -225,7 +220,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	//Y&X
 	count=0;
@@ -236,7 +230,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i>-3;i--) 
@@ -248,7 +241,6 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 	
 	count=0;
 	for(int i=-1;i<3;i+=2) 
@@ -258,46 +250,77 @@ void check_win(int x, int y, int player)
 		who_win=player;
 		return;
 	}
-	//if(count==1) warning=1;
 }
 
-void turn(int AI,int player)
+void turn_play(int AI,int player)
 {
-	int stop;
+	int stop,num=0;
 	char numchar='0';
-	int num=0;
 	do
 	{
 		stop=1;
 		if(player==1) printf("\n __________\n|          |\n| Player X |\n|__________|\n");
 		else printf("\n __________\n|          |\n| Player O |\n|__________|\n");
 		printf("\nChoose cell: "); fflush(stdin); scanf("%c",&numchar); fflush(stdin);
-		if(numchar<'1'||numchar>'9')
+		if(numchar=='s')
 		{
-			if(!debug) system("cls");
-			if(AI) print_table(1);
-			else print_table(0);
-			fflush(stdin);
-			printf("Number is error!\n",numchar);
+			FILE *fptr;
+			fptr = fopen("tic_tac_toe_Neal.txt","w");
+			for(int i=0;i<n;i++)
+				for(int j=0;j<n;j++)
+					fprintf(fptr,"%d ",table[i][j]);
+			
+			fprintf(fptr,"%d ",AI);
+			
+			if(AI) fprintf(fptr,"%d %d ",win_player_AI,win_AI);
+			else fprintf(fptr,"%d %d ",win_player1,win_player2);
+			fprintf(fptr,"%d",player);
+			fclose(fptr);
 		}
-		else
+		if(numchar=='e')
 		{
-			
-			if(numchar=='1') num=1;if(numchar=='2') num=2;if(numchar=='3') num=3;if(numchar=='4') num=4;
-			if(numchar=='5') num=5;if(numchar=='6') num=6;if(numchar=='7') num=7;if(numchar=='8') num=8;
-			if(numchar=='9') num=9;
-			
-			if(table[locate.A[num-1].x][locate.A[num-1].y]!=0)
+			exits=0;
+			return;
+		}
+		if(numchar!='s')
+		{
+			if(numchar<'1'||numchar>'9')
 			{
 				if(!debug) system("cls");
 				if(AI) print_table(1);
 				else print_table(0);
+				printf("e. exit\t\t\ts. save\n");
 				fflush(stdin);
-				printf("The cell is chosen! Please choose again!\n");
+				printf("Number is error!\n",numchar);
 			}
-			else stop=0;
+			
+			else
+			{
+				if(numchar=='1') num=1;if(numchar=='2') num=2;if(numchar=='3') num=3;if(numchar=='4') num=4;
+				if(numchar=='5') num=5;if(numchar=='6') num=6;if(numchar=='7') num=7;if(numchar=='8') num=8;
+				if(numchar=='9') num=9;
+				
+				if(table[locate.A[num-1].x][locate.A[num-1].y]!=0)
+				{
+					if(!debug) system("cls");
+					if(AI) print_table(1);
+					else print_table(0);
+					printf("e. exit\t\t\ts. save\n");
+					fflush(stdin);
+					printf("The cell is chosen! Please choose again!\n");
+				}
+				else stop=0;
+			}
 		}
-	} while(stop);
+		else
+		{
+			system("cls");
+			if(AI) print_table(1);
+			else print_table(0);
+			printf("e. exit\t\t\ts. save\n");
+		}
+		
+	} while(stop&&exit&&numchar=='s');
 	if(table[locate.A[num-1].x][locate.A[num-1].y]==0)
 	{
 		table[locate.A[num-1].x][locate.A[num-1].y]=player;	
@@ -317,6 +340,7 @@ void turn(int AI,int player)
 		fflush(stdin);
 	}
 	check_win(locate.A[num-1].x,locate.A[num-1].y,player);
+	if(who_win==0) printf("e. exit\t\t\ts. save\n");
 }
 
 void AI_turn(int num, int lucuto, int* turn_done,int player)
@@ -325,6 +349,18 @@ void AI_turn(int num, int lucuto, int* turn_done,int player)
 	init_cell(&c);
 	int x=locate.A[num-1].x;
 	int y=locate.A[num-1].y;
+	int temp=n*n/2+1;
+	
+	//priority
+	if(table[locate.A[temp-1].x][locate.A[temp-1].y]==0)
+	{
+		table[locate.A[temp-1].x][locate.A[temp-1].y]=2;
+		cache_o[0]++;
+		cache_o[cache_o[0]]=xy_to_num(locate.A[temp-1].x,locate.A[temp-1].y);
+		*turn_done=1;
+		check_win(locate.A[temp-1].x,locate.A[temp-1].y,2);
+		return;
+	}
 	
 	//X
 	int count=0;
@@ -569,8 +605,7 @@ void AI_turn(int num, int lucuto, int* turn_done,int player)
 		check_win(c.x,c.y,2);
 		return;
 	}
-	
-	if(cache_x[0]==1)
+	if(player==1)
 	{
 		table[c.x][c.y]=2;
 		cache_o[0]++;
@@ -578,55 +613,66 @@ void AI_turn(int num, int lucuto, int* turn_done,int player)
 		*turn_done=1;
 		check_win(c.x,c.y,2);
 		return;
-	}
-//	if(player==2&&cache_o[0]==lucuto)
-//	{
-//		table[c.x][c.y]=2;
-//		cache_o[0]++;
-//		cache_o[cache_o[0]]=xy_to_num(c.x,c.y);
-//		*turn_done=1;
-//		check_win(c.x,c.y,2);
-//		return;
-//	}
+	}	
 }
 
 void normal()
 {
 	print_table(0);
+	printf("e. exit\t\t\ts. save\n");
 	int count=1,stop_count=1;
 	who_win=0;
 	do
 	{
 		for(int i=1;i<=2;i++)
 		{
-			turn(0,i);
+			if(turn!=0)
+			{
+				i=turn;
+				turn=0;
+			}
+			turn_play(0,i);
 			count++;
-			if(count==n*n+1||who_win!=0) break;
+			if(count==n*n+1||who_win!=0||!exits) break;
 		}
 		if(count>n*n) stop_count=0;
 		if(who_win!=0)
 		{
-			if(who_win==1) printf("\n*PLAYER X WON!*\n\n");
-			if(who_win==2) printf("\n*PLAYER O WON!*\n\n");
+			if(who_win==1)
+			{
+				win_player1++;
+				printf("\n*PLAYER X WON!*\n\n");
+			}
+			if(who_win==2)
+			{
+				win_player2++;
+				printf("\n*PLAYER O WON!*\n\n");
+			}
 			win=0;
 		}
-	} while(stop_count&&win);
+	} while(stop_count&&win&&exits);
 	if(count>n*n&&who_win==0) printf("\n\t    *DRAWN!*\n\n");
 }
 
 void AI()
 {
 	print_table(1);
+	printf("e. exit\t\t\t s. save");
 	int count=1,stop_count=1;
 	who_win=0;
 	do
 	{
 		for(int i=1;i<=2;i++)
 		{
-			if(i==1) turn(1,i);
+			if(turn!=0)
+			{
+				i=turn;
+				turn=0;
+			}
+			if(i==1) turn_play(1,i);
 			else
 			{
-				if(count<3)
+				if(exits)
 				{
 					int turn_done=0;
 					for(int j=cache_o[0];j>0;j--)
@@ -639,36 +685,31 @@ void AI()
 						if(turn_done) break;
 						AI_turn(cache_x[j],j,&turn_done,1);
 					}
-				}
-				else
-				{
-					int turn_done=0;
-					for(int j=cache_x[0];j>0;j--)
-					{
-						if(turn_done) break;
-						AI_turn(cache_x[j],j,&turn_done,1);
-					}
-					for(int j=cache_o[0];j>0;j--)
-					{
-						if(turn_done) break;
-						AI_turn(cache_o[j],j,&turn_done,2);
-					}
+					sleep(2);
 				}
 			}
-			//warning=0;
-			system("cls");
+			if(!debug) system("cls");
 			print_table(1);
 			count++;
+			if(who_win==0&&count<n*n+1) printf("e. exit\t\t\t s. save");
 			if(count==n*n+1||who_win!=0) break;
 		}
 		if(count>n*n) stop_count=0;
 		if(who_win!=0)
 		{
-			if(who_win==1) printf("\n*PLAYER X WON!*\n\n");
-			if(who_win==2) printf("\n*A.I WON!*\n\n");
+			if(who_win==1)
+			{
+				win_player_AI++;
+				printf("\n*PLAYER X WON!*\n\n");
+			}
+			if(who_win==2)
+			{
+				win_AI++;
+				printf("\n*A.I WON!*\n\n");
+			}
 			win=0;
 		}
-	} while(stop_count&&win);
+	} while(stop_count&&win&&exits);
 	if(count>n*n&&who_win==0) printf("\n\t    *DRAWN!*\n\n");
 }
 
@@ -678,23 +719,60 @@ int main()
 	init();
 	cell c;
 	init_cell(&c);
+	exits=1;
+	int mode=1;
 	do
 	{
+		FILE *file;
+		file = fopen("tic_tac_toe_Neal.txt","r");
 		printf("\t          ***TIC TAC TOE***\n\n");
-		printf("\t1. Normal\n\t2. A.I\n\t3. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
-		if(chose=='1'||chose=='2')
+		printf("\t1. Continue");
+		if (file==NULL) printf(" (have not file yet)\n");
+		else printf("\n");
+		printf("\t2. Normal\n\t3. A.I\n\t4. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
+		if(chose=='1'&&file!=NULL)
 		{
-			system("cls");
+			FILE *load;
+			load = fopen("tic_tac_toe_Neal.txt","r");
+			for(int i=0;i<n;i++)
+				for(int j=0;j<n;j++)
+					fscanf(load,"%d",&table[i][j]);
+					
+			fscanf(load,"%d",&mode);
+			
+			if(mode==1)
+			{
+				fscanf(load,"%d%d",&win_player_AI,&win_AI);
+				chose='3';
+			}
+			if(mode==0)
+			{
+				fscanf(load,"%d%d",&win_player1,&win_player2);
+				chose='2';
+			}
+			
+			fscanf(load,"%d",&turn);
+			fclose(load);
+		}
+		fclose(file);
+		printf("%d\n",mode);
+		if(chose=='1'&&!debug) system("cls");
+		if(chose=='2'||chose=='3')
+		{
+			if(!debug) system("cls");
 			char again='1';
 			do
 			{
-				if(chose=='1') normal();
-				if(chose=='2') AI();
-				do
+				if(chose=='2') normal();
+				if(chose=='3') AI();
+				if(exits)
 				{
-					printf("     1. Again\t     2. Menu\nchoose: "); fflush(stdin); scanf("%c",&again);
-					if(again!='1'&&again!='2') printf("Error number!\n");
-				} while(again!='2'&&again!='1');
+					do
+					{
+						printf("     1. Again\t     2. Menu\nchoose: "); fflush(stdin); scanf("%c",&again);
+						if(again!='1'&&again!='2') printf("Error number!\n");
+					} while(again!='2'&&again!='1');
+				}
 				if(again=='1')
 				{
 					system("cls");
@@ -705,8 +783,9 @@ int main()
 					system("cls");
 					reset();
 				}
-			} while(again=='1');
+			} while(again=='1'&&exits);
 		}
-		if(chose!='1'&&chose!='2'&&chose!='3') printf("*Error number, please chose again!");
-	} while(chose!='3');
+		if(chose!='1'&&chose!='2'&&chose!='3'&&chose!='4') printf("*Error number, please chose again!");
+		exits=1;
+	} while(chose!='4');
 }
