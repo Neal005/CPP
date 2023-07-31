@@ -132,7 +132,7 @@ void print_table(int AI)
 		if(i<n) printf("   ");
 	}
 	printf("\n");
-	printf("\n\n\t\t\t                                              made by Nguyen Le Hoang Luc - Neal\n");
+	printf("\n\n\t\t\t                                              made by Nguyen Le Hoang Luc - (NEAL <3 THA)\n");
 }
 
 void check_win(int x, int y, int player)
