@@ -724,17 +724,15 @@ int main()
 	int mode=1;
 	do
 	{
-		FILE *file;
-		file = fopen("tic_tac_toe_Neal.txt","r");
+		FILE *load;
+		load=fopen("tic_tac_toe_Neal.txt","r");
 		printf("\t          ***TIC TAC TOE***\n\n");
 		printf("\t1. Continue");
-		if (file==NULL) printf(" (have not file yet)\n");
+		if (load==NULL) printf(" (have not file yet)\n");
 		else printf("\n");
-		printf("\t2. Normal\n\t3. A.I\n\t4. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
-		if(chose=='1'&&file!=NULL)
+		printf("\t2. Normal\n\t3. A.I\n\t4. Delete cache file\n\t5. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
+		if(chose=='1'&&load!=NULL)
 		{
-			FILE *load;
-			load = fopen("tic_tac_toe_Neal.txt","r");
 			for(int i=0;i<n;i++)
 				for(int j=0;j<n;j++)
 					fscanf(load,"%d",&table[i][j]);
@@ -755,9 +753,8 @@ int main()
 			fscanf(load,"%d",&turn);
 			
 			fscanf(load,"%d",&load_count);
-			fclose(load);
 		}
-		fclose(file);
+		fclose(load);
 		if(chose=='1'&&!debug) system("cls");
 		if(chose=='2'||chose=='3')
 		{
@@ -787,7 +784,21 @@ int main()
 				}
 			} while(again=='1'&&exits);
 		}
-		if(chose!='1'&&chose!='2'&&chose!='3'&&chose!='4') printf("\n*Error number, please chose again!\n");
+		if(chose!='1'&&chose!='2'&&chose!='3'&&chose!='4'&&chose!='5') printf("\n*Error number, please chose again!\n");
 		exits=1;
-	} while(chose!='4');
+		if(chose=='4')
+		{
+			win_player1=win_player2=win_player_AI=win_AI=0;
+			reset();
+			FILE *open;
+			open=fopen("tic_tac_toe_Neal.txt","r");
+			if(open!=NULL)
+			{
+				fclose(open);
+				remove("tic_tac_toe_Neal.txt");
+			}
+			if(!debug) system("cls");
+		}
+	} while(chose!='5');
+	exit(1);
 }
