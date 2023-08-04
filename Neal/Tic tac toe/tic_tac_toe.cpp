@@ -252,7 +252,7 @@ void check_win(int x, int y, int player)
 	}
 }
 
-void turn_play(int AI,int player, int count)
+void turn_play(int AI,int player, int* count)
 {
 	int stop,num=0;
 	char numchar='0';
@@ -287,16 +287,36 @@ void turn_play(int AI,int player, int count)
 			system("cls");
 			if(AI) print_table(1);
 			else print_table(0);
-			if(!who_win) printf("e. exit\t\t\ts. save\n");
+			if(!who_win) printf("e. exit\t   r. reset\t s. save\n");
 		}
-		if(numchar!='e'&&numchar!='s')
+		if(numchar=='r')
+		{
+			reset();
+			if(AI)
+			{
+				win_player_AI=0;
+				win_AI=0;
+			}
+			else
+			{
+				win_player1=0;
+				win_player2=0;
+			}
+			*count=1;
+			
+			system("cls");
+			if(AI) print_table(1);
+			else print_table(0);
+			if(!who_win) printf("e. exit\t   r. reset\t s. save\n");
+		}
+		if(numchar!='e'&&numchar!='s'&&numchar!='r')
 		{
 			if(numchar<'1'||numchar>'9')
 			{
 				if(!debug) system("cls");
 				if(AI) print_table(1);
 				else print_table(0);
-				if(!who_win) printf("e. exit\t\t\ts. save\n");
+				if(!who_win) printf("e. exit\t   r. reset\t s. save\n");
 				fflush(stdin);
 				printf("\nNumber is error!\n",numchar);
 			}
@@ -312,14 +332,14 @@ void turn_play(int AI,int player, int count)
 					if(!debug) system("cls");
 					if(AI) print_table(1);
 					else print_table(0);
-					if(!who_win) printf("e. exit\t\t\ts. save\n");
+					if(!who_win) printf("e. exit\t   r. reset\t s. save\n");
 					fflush(stdin);
 					printf("\nThe cell is chosen! Please choose again!\n");
 				}
 				else stop=0;
 			}
 		}
-	} while(stop&&exits||numchar=='s');
+	} while(stop&&exits||numchar=='s'||numchar=='r');
 	if(table[locate.A[num-1].x][locate.A[num-1].y]==0&&num!=0)
 	{
 		table[locate.A[num-1].x][locate.A[num-1].y]=player;	
@@ -339,7 +359,7 @@ void turn_play(int AI,int player, int count)
 		fflush(stdin);
 	}
 	check_win(locate.A[num-1].x,locate.A[num-1].y,player);
-	if(!who_win&&count<n*n) printf("e. exit\t\t\ts. save\n");
+	if(!who_win&&*count<n*n) printf("e. exit\t   r. reset\t s. save\n");
 }
 
 void AI_turn(int num, int lucuto, int* turn_done,int player)
@@ -618,7 +638,7 @@ void AI_turn(int num, int lucuto, int* turn_done,int player)
 void normal()
 {
 	print_table(0);
-	printf("e. exit\t\t\ts. save\n");
+	printf("e. exit\t   r. reset\t s. save\n");
 	int count=load_count,stop_count=1;
 	load_count=1;
 	who_win=0;
@@ -631,7 +651,7 @@ void normal()
 				i=turn;
 				turn=0;
 			}
-			turn_play(0,i,count);
+			turn_play(0,i,&count);
 			count++;
 			if(count>n*n||who_win!=0||!exits) break;
 		}
@@ -657,7 +677,7 @@ void normal()
 void AI()
 {
 	print_table(1);
-	printf("e. exit\t\t\t s. save");
+	printf("e. exit\t   r. reset\t s. save\n");
 	int count=load_count,stop_count=1;
 	load_count=1;
 	who_win=0;
@@ -670,7 +690,7 @@ void AI()
 				i=turn;
 				turn=0;
 			}
-			if(i==1) turn_play(1,i,count);
+			if(i==1) turn_play(1,i,&count);
 			else
 			{
 				if(exits)
@@ -692,7 +712,7 @@ void AI()
 			if(!debug) system("cls");
 			print_table(1);
 			count++;
-			if(who_win==0&&count<n*n+1) printf("e. exit\t\t\t s. save");
+			if(who_win==0&&count<n*n+1) printf("e. exit\t   r. reset\t s. save\n");
 			if(count>n*n||who_win!=0) break;
 		}
 		if(count>n*n) stop_count=0;
@@ -730,7 +750,7 @@ int main()
 		printf("\t1. Continue");
 		if (load==NULL) printf(" (have not file yet)\n");
 		else printf("\n");
-		printf("\t2. Normal\n\t3. A.I\n\t4. Delete cache file\n\t5. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
+		printf("\t2. Normal\n\t3. A.I\n\t4. Delete file save\n\t5. Quit\n\nChoose: "); fflush(stdin); scanf("%c",&chose);
 		if(chose=='1'&&load!=NULL)
 		{
 			for(int i=0;i<n;i++)
