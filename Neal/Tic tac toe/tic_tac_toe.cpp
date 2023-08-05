@@ -281,7 +281,7 @@ void turn_play(int AI,int player, int* count)
 			if(AI) fprintf(fptr,"%d %d ",win_player_AI,win_AI);
 			else fprintf(fptr,"%d %d ",win_player1,win_player2);
 			fprintf(fptr,"%d ",player);
-			fprintf(fptr,"%d",count);
+			fprintf(fptr,"%d",*count);
 			fclose(fptr);
 			
 			system("cls");
