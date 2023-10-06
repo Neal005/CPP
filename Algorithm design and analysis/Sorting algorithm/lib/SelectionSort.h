@@ -1,1 +1,0 @@
-void SelectionSort(recordtype a[ ], int n);
