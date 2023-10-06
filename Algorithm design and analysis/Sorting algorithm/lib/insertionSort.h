@@ -1,1 +1,0 @@
-void InsertionSort(recordtype a[], int n);
