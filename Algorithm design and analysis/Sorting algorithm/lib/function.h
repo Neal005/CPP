@@ -1,0 +1,1 @@
+void Swap(recordtype *x, recordtype *y);

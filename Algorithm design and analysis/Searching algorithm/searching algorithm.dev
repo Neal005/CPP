@@ -51,7 +51,7 @@ AutoIncBuildNr=0
 SyncProduct=1
 
 [Unit1]
-FileName=main\main.cpp
+FileName=main.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -61,7 +61,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit2]
-FileName=binary_search\Binary_search.cpp
+FileName=algorithm\Binary_search.cpp
 CompileCpp=1
 Folder=
 Compile=1
@@ -71,7 +71,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit3]
-FileName=sequence_search\Sequence_search.cpp
+FileName=algorithm\Sequence_search.cpp
 CompileCpp=1
 Folder=
 Compile=1
