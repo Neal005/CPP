@@ -1,1 +1,0 @@
-int Sequence_search(int x,int a[ ],int n);

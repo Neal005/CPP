@@ -1,1 +1,0 @@
-int binarysearch(int x,int *a,int left,int right);
