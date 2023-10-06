@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o algorithm/function.o algorithm/insertionSort.o algorithm/SelectionSort.o
-LINKOBJ  = main.o algorithm/function.o algorithm/insertionSort.o algorithm/SelectionSort.o
+OBJ      = main.o algorithm/bubbleSort.o algorithm/function.o algorithm/insertionSort.o algorithm/quickSort.o algorithm/selectionSort.o algorithm/heapSort.o
+LINKOBJ  = main.o algorithm/bubbleSort.o algorithm/function.o algorithm/insertionSort.o algorithm/quickSort.o algorithm/selectionSort.o algorithm/heapSort.o
 LIBS     = -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib" -L"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc
 INCS     = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
@@ -27,11 +27,20 @@ $(BIN): $(OBJ)
 main.o: main.cpp
 	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
 
+algorithm/bubbleSort.o: algorithm/bubbleSort.cpp
+	$(CPP) -c algorithm/bubbleSort.cpp -o algorithm/bubbleSort.o $(CXXFLAGS)
+
 algorithm/function.o: algorithm/function.cpp
 	$(CPP) -c algorithm/function.cpp -o algorithm/function.o $(CXXFLAGS)
 
 algorithm/insertionSort.o: algorithm/insertionSort.cpp
 	$(CPP) -c algorithm/insertionSort.cpp -o algorithm/insertionSort.o $(CXXFLAGS)
 
-algorithm/SelectionSort.o: algorithm/SelectionSort.cpp
-	$(CPP) -c algorithm/SelectionSort.cpp -o algorithm/SelectionSort.o $(CXXFLAGS)
+algorithm/quickSort.o: algorithm/quickSort.cpp
+	$(CPP) -c algorithm/quickSort.cpp -o algorithm/quickSort.o $(CXXFLAGS)
+
+algorithm/selectionSort.o: algorithm/selectionSort.cpp
+	$(CPP) -c algorithm/selectionSort.cpp -o algorithm/selectionSort.o $(CXXFLAGS)
+
+algorithm/heapSort.o: algorithm/heapSort.cpp
+	$(CPP) -c algorithm/heapSort.cpp -o algorithm/heapSort.o $(CXXFLAGS)
