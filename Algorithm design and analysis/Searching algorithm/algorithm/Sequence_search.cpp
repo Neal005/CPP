@@ -1,6 +1,6 @@
 #include<stdio.h>
 
-int Sequence_search(int x,int a[ ],int n)
+int SequenceSearch(int x,int a[ ],int n)
 {
 	int found,i;
 	found=0;

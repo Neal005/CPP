@@ -1,2 +1,2 @@
-int Sequence_search(int x,int a[ ],int n);
-int binarysearch(int x,int *a,int left,int right);
+int SequenceSearch(int x,int a[ ],int n);
+int BinarySearch(int x,int *a,int left,int right);
