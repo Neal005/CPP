@@ -1,14 +1,17 @@
 //Selection Sort
-void SelectionSort(recordtype a[ ], int n);
+void selectionSort(recordtype a[ ], int n);
 
 //Insertion Sort
-void InsertionSort(recordtype a[], int n);
+void insertionSort(recordtype a[], int n);
 
 //Bubble Sort
-void BubbleSort(recordtype a[],int n);
+void bubbleSort(recordtype a[],int n);
 
 //Quick Sort
-void QuickSort(recordtype a[],int i,int j);
+void quickSort(recordtype a[],int i,int j);
+
+//Quick sort bien the
+void variantQuickSort(recordtype a[],int i,int j);
 
 //Heap Sort
-void HeapSort(recordtype a[],int n);
+void heapSort(recordtype a[],int n);

@@ -2,8 +2,9 @@
 #include "../lib/struct.h"
 #include "../lib/function.h"
 
-void SelectionSort(recordtype a[], int n)
+void selectionSort(recordtype a[],int n)
 {
+	if(debug)printf("selection sort\n");
 	int i,j,lowindex;
 	keytype lowkey;
 	for(i=0;i<=n-2;i++)
@@ -16,6 +17,6 @@ void SelectionSort(recordtype a[], int n)
 			lowkey=a[j].key;
 			lowindex=j;
 		}
-		Swap(&a[i],&a[lowindex]);
+		swap(&a[i],&a[lowindex]);
 	}
 }
