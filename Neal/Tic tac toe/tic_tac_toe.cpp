@@ -821,4 +821,5 @@ int main()
 		}
 	} while(chose!='5');
 	exit(1);
+	return 0;
 }
