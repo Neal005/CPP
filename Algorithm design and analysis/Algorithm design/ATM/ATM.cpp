@@ -1,25 +1,28 @@
 #include<stdio.h>
 #include<iostream>
-#define debug 1
+#include<stdlib.h>
+#include<string.h>
+#define debug 0
 
 //struct
 typedef int keytype;
-typedef char* othertype;
 
 typedef struct
 {
 	keytype value;
-	othertype description;
+	char description[50];
 }recordtype;
 
 //function
-void readData(recordtype money[],int *kind)
+recordtype * readData(int *kind)
 {
 	if(debug) printf("Reading data\n");
 	int i=0;
 	FILE *f;
 	if(debug)printf("Opening file\n");
 	f=fopen("ATM.txt","r");
+	recordtype *money;
+	money=(recordtype*)malloc(sizeof(recordtype));
 	if(f==NULL) printf("Can be open file\n");
 	else
 	{
@@ -30,17 +33,18 @@ void readData(recordtype money[],int *kind)
 			if(debug) printf("Loop %d\n",i+1);
 			fscanf(f,"%d",&money[i].value);
 			if(debug) printf("%d ",money[i].value);
-			fscanf(f,"%c",&temp);
 			fgets(money[i].description,50,f);
 			money[i].description[strlen(money[i].description)-1]='\0';
 			if(debug) printf("%s",money[i].description);
 			if(debug) printf("\n");
 			i++;
+			money=(recordtype*)realloc(money,sizeof(recordtype)*(i+1));
 		}
-	}	
+	}
+	*kind=i;	
 	fclose(f);
-	*kind=i;
 	if(debug) printf("%d",*kind);
+	return money;
 }
 
 void printData(recordtype a[],int n)
@@ -48,8 +52,20 @@ void printData(recordtype a[],int n)
 	if(debug)printf("Print data\n");
 	for(int i=0;i<n;i++)
 	{
-		printf("%d\t%d\t%s\n",i+1,a[i].value,a[i].description);
+		printf("%d\t%d\n",i+1,a[i].value);
 	}
+}
+
+void printSol(recordtype money[],int sol[],int kind,int sum)
+{
+	for(int i=0;i<kind;i++)
+	{
+		if(sol[i]>0)
+		{
+			printf("Numbers of %d (%s): %d\n",money[i].value,money[i].description,sol[i]);
+		}
+	}
+	printf("Sum: %d\n",sum);
 }
 
 void swap(recordtype *x,recordtype *y)
@@ -102,18 +118,19 @@ void variantQuickSort(recordtype a[],int i,int j)
 }
 
 //algorithm
-void atmGreedy(recordtype a[],int kind,int n)
+void atmGreedy(recordtype money[],int sol[],int kind,int n,int *sum)
 {
-	int sum=0,stop=0;
+	int stop=0;
+	*sum=0;
 	for(int i=0;i<kind;i++)
 	{
 		stop=0;
 		do
 		{
-			if(sum+a[i].value<=n)
+			if(*sum+money[i].value<=n)
 			{
-				sum+=a[i].value;
-//				sol[i]++;
+				*sum+=money[i].value;
+				sol[i]++;
 			}
 			else stop=1;
 		}while(stop==0);
@@ -123,10 +140,16 @@ void atmGreedy(recordtype a[],int kind,int n)
 //main
 int main()
 {
-	int n,kind;
-	recordtype money[100];
-	readData(money,&kind);
-	//printData(a,kind);
-	
+	int n,kind,sum;
+	printf("Enter value:"); scanf("%d",&n);
+	recordtype * money;
+	money=readData(&kind);
+	int sol[kind];
+	for(int i=0;i<kind;i++)
+		sol[i]=0;
+	variantQuickSort(money,0,kind-1);
+	atmGreedy(money,sol,kind,n,&sum);
+	printSol(money,sol,kind,sum);
+	free(money);
 	return 0;
 }
