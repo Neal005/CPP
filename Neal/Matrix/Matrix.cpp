@@ -342,4 +342,5 @@ void Matrix()
 int main()
 {
 	Matrix();
+	return 0;
 }

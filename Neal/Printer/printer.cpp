@@ -148,4 +148,5 @@ int main()
 		} while(check=='2');
 		if(check=='1') system("cls");
 	} while(check=='1');
+	return 0;
 }

@@ -73,4 +73,5 @@ int main()
 			system("cls");
 		}
 	} while(check=='1');
+	return 0;
 }
