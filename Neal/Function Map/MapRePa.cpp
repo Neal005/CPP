@@ -32,9 +32,12 @@ int main()
 	scanf("%f%f%f%f",&head1,&tail1,&head2,&tail2);
 	solve=mapRePa(x,head1,tail1,head2,tail2);
 	if(debug) printf("\n*Solve = %.5f",solve);
-	f = fopen("MapRePa.txt", "w");
-	fprintf(f,"Solve = %.5f",solve);
-	
+	else
+	{
+		f = fopen("MapRePa.txt", "w");
+		fprintf(f,"Input: %.5f\n(%.5f-%.5f)->(%.5f-%.5f)\n\t**Solve = %.5f**",x,head1,tail1,head2,tail2,solve);
+		fclose(f);
+	}
 	if(debug) Sleep(5000);
 	return 0;
 }
