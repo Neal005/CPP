@@ -1,0 +1,3 @@
+1. To saving the distance:
+	open file .neal with notepad and replace with number of distance then save file
+2. This aplication is auto check that you must changing oil or not and more over it auto save the distance that suitable for changing oil
