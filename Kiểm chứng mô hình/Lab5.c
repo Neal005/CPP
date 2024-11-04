@@ -10,32 +10,44 @@ double checkTerm();
 double checkFactor();
 
 // Hàm lấy số thực
-double getDouble(int pos) {
+double getDouble(int pos)
+{
   double number = 0.0;
   int sign = 1;
   int decimalFound = 0;
   double decimalPlace = 0.1;
 
   // Xử lý dấu
-  if (strInput[pos] == '-') {
+  if (strInput[pos] == '-')
+  {
     sign = -1;
     pos++;
-  } else if (strInput[pos] == '+') {
+  }
+  else if (strInput[pos] == '+')
+  {
     pos++;
   }
 
-  while (pos < strlen(strInput) && (isdigit(strInput[pos]) || strInput[pos] == '.')) {
-    if (strInput[pos] == '.') {
-      if (decimalFound) {
+  while (pos < strlen(strInput) && (isdigit(strInput[pos]) || strInput[pos] == '.'))
+  {
+    if (strInput[pos] == '.')
+    {
+      if (decimalFound)
+      {
         printf("Invalid number format\n");
         exit(1);
       }
       decimalFound = 1;
-    } else {
-      if (decimalFound) {
+    }
+    else
+    {
+      if (decimalFound)
+      {
         number += (strInput[pos] - '0') * decimalPlace;
         decimalPlace /= 10.0;
-      } else {
+      }
+      else
+      {
         number = number * 10.0 + (strInput[pos] - '0');
       }
     }
@@ -46,19 +58,27 @@ double getDouble(int pos) {
 }
 
 // Hàm kiểm tra biểu thức
-double checkExpression() {
+double checkExpression()
+{
   double result = checkTerm();
-  if (currentPos == strlen(strInput)) {
+  if (currentPos == strlen(strInput))
+  {
     return result;
   }
-  while (currentPos < strlen(strInput)) {
-    if (strInput[currentPos] == '+') {
+  while (currentPos < strlen(strInput))
+  {
+    if (strInput[currentPos] == '+')
+    {
       currentPos++;
       result += checkExpression();
-    } else if (strInput[currentPos] == '-') {
+    }
+    else if (strInput[currentPos] == '-')
+    {
       currentPos++;
       result -= checkExpression();
-    } else {
+    }
+    else
+    {
       break; // Dừng nếu gặp phép toán khác
     }
   }
@@ -66,24 +86,33 @@ double checkExpression() {
 }
 
 // Hàm kiểm tra số hạng
-double checkTerm() {
+double checkTerm()
+{
   double result = checkFactor();
-  if (currentPos == strlen(strInput)) {
+  if (currentPos == strlen(strInput))
+  {
     return result;
   }
-  while (currentPos < strlen(strInput)) {
-    if (strInput[currentPos] == '*') {
+  while (currentPos < strlen(strInput))
+  {
+    if (strInput[currentPos] == '*')
+    {
       currentPos++;
       result *= checkTerm();
-    } else if (strInput[currentPos] == '/') {
+    }
+    else if (strInput[currentPos] == '/')
+    {
       currentPos++;
       double divisor = checkTerm();
-      if (divisor == 0.0) {
+      if (divisor == 0.0)
+      {
         printf("Error: Division by zero!\n");
         exit(1);
       }
       result /= divisor;
-    } else {
+    }
+    else
+    {
       break; // Dừng nếu gặp phép toán khác
     }
   }
@@ -91,25 +120,33 @@ double checkTerm() {
 }
 
 // Hàm kiểm tra thừa số
-double checkFactor() {
-  if (strInput[currentPos] == '(') {
+double checkFactor()
+{
+  if (strInput[currentPos] == '(')
+  {
     currentPos++;
     double result = checkExpression();
-    if (strInput[currentPos] == ')') {
+    if (strInput[currentPos] == ')')
+    {
       currentPos++;
       return result;
-    } else {
+    }
+    else
+    {
       printf("Invalid Expression\n");
       exit(1);
     }
-  } else {
+  }
+  else
+  {
     return getDouble(currentPos);
   }
 }
 
-int main() {
-  printf("Nhap bieu thuc: ");
-  fgets(strInput, sizeof(strInput), stdin); // Sử dụng fgets để đọc input an toàn hơn
+int main()
+{
+  printf("Enter an expression: ");
+  fgets(strInput, sizeof(strInput), stdin);
   double result = checkExpression();
   printf("Result: %f\n", result);
   return 0;
