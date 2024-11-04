@@ -61,25 +61,21 @@ double getDouble(int pos)
 double checkExpression()
 {
   double result = checkTerm();
-  if (currentPos == strlen(strInput))
-  {
-    return result;
-  }
   while (currentPos < strlen(strInput))
   {
     if (strInput[currentPos] == '+')
     {
       currentPos++;
-      result += checkExpression();
+      result += checkTerm();
     }
     else if (strInput[currentPos] == '-')
     {
       currentPos++;
-      result -= checkExpression();
+      result -= checkTerm();
     }
     else
     {
-      break; // Dừng nếu gặp phép toán khác
+      break;
     }
   }
   return result;
@@ -113,7 +109,7 @@ double checkTerm()
     }
     else
     {
-      break; // Dừng nếu gặp phép toán khác
+      break;
     }
   }
   return result;
