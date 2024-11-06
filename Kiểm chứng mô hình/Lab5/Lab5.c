@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#define debug 0
+
 char strInput[100];
 int currentPos = 0;
 
@@ -34,7 +36,7 @@ double getDouble(int pos)
     {
       if (decimalFound)
       {
-        printf("Invalid number format\n");
+        printf("Invalid number format at position %d\n", pos);
         exit(1);
       }
       decimalFound = 1;
@@ -57,6 +59,19 @@ double getDouble(int pos)
   return sign * number;
 }
 
+void removeSpaces(char *str)
+{
+  int i, j;
+  for (i = 0, j = 0; str[i] != '\0'; i++)
+  {
+    if (str[i] != ' ' && str[i] != '\t')
+    {
+      str[j++] = str[i];
+    }
+  }
+  str[j] = '\0';
+}
+
 // Hàm kiểm tra biểu thức
 double checkExpression()
 {
@@ -73,6 +88,11 @@ double checkExpression()
       currentPos++;
       result -= checkTerm();
     }
+    else if (strInput[currentPos] != '\n' && strInput[currentPos] != ')')
+    {
+      printf("Invalid character '%c' at position %d\n", strInput[currentPos], currentPos);
+      exit(1);
+    }
     else
     {
       break;
@@ -85,12 +105,9 @@ double checkExpression()
 double checkTerm()
 {
   double result = checkFactor();
-  if (currentPos == strlen(strInput))
-  {
-    return result;
-  }
   while (currentPos < strlen(strInput))
   {
+
     if (strInput[currentPos] == '*')
     {
       currentPos++;
@@ -118,7 +135,12 @@ double checkTerm()
 // Hàm kiểm tra thừa số
 double checkFactor()
 {
-  if (strInput[currentPos] == '(')
+  if (strInput[currentPos] == ')')
+  {
+    printf("Unmatched parenthesis at position %d\n");
+    exit(1);
+  }
+  else if (strInput[currentPos] == '(')
   {
     currentPos++;
     double result = checkExpression();
@@ -129,7 +151,7 @@ double checkFactor()
     }
     else
     {
-      printf("Invalid Expression\n");
+      printf("Unmatched parenthesis at position %d\n", currentPos);
       exit(1);
     }
   }
@@ -141,8 +163,47 @@ double checkFactor()
 
 int main()
 {
-  printf("Enter an expression: ");
-  fgets(strInput, sizeof(strInput), stdin);
+  char choice;
+  FILE *fp;
+
+  printf("How to input:\n");
+  printf("1. From keyboard\n");
+  printf("2. Choosing file\n");
+  scanf(" %c", &choice);
+
+  if (choice == '1')
+  {
+    printf("Enter an expression: ");
+    fgets(strInput, sizeof(strInput), stdin);
+    fgets(strInput, sizeof(strInput), stdin);
+    removeSpaces(strInput);
+  }
+  else if (choice == '2')
+  {
+    char filename[100];
+    printf("Enter file name: ");
+    fgets(filename, sizeof(filename), stdin);
+    fgets(filename, sizeof(filename), stdin);
+    filename[strcspn(filename, "\n")] = 0;
+    if(debug==1) printf("%s ",filename);
+
+    fp = fopen(filename, "r");
+    if (fp == NULL)
+    {
+      printf("cannot open file.\n");
+      return 1;
+    }
+
+    fgets(strInput, sizeof(strInput), fp);
+    removeSpaces(strInput);
+    fclose(fp);
+  }
+  else
+  {
+    printf("invalid choice.\n");
+    return 1;
+  }
+
   double result = checkExpression();
   printf("Result: %f\n", result);
   return 0;
